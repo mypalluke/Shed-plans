@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARCHITECTURAL WORKING DRAWINGS | 12'x24' MONO-PITCH STORAGE SHED</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@400;500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-workspace: #0b0f17;
+      --sheet-bg: #ffffff;
+      --ink-primary: #0a0e17;
+      --ink-secondary: #334155;
+      --ink-dim: #64748b;
+      --ink-fine: #94a3b8;
+      --cad-red: #c00000;
+      --cad-blue: #005a9c;
+      --cad-amber: #945300;
+      --cad-green: #007a3d;
+      --hatch-bg: #f8fafc;
+      --border-outer: #000000;
+      --border-inner: #000000;
+      --titleblock-bg: #ffffff;
+      --shadow-sheet: rgba(0, 0, 0, 0.45);
+    }
+
+    body.blueprint-mode {
+      --sheet-bg: #0d2847;
+      --ink-primary: #f0f7ff;
+      --ink-secondary: #cde4ff;
+      --ink-dim: #7fb2e6;
+      --ink-fine: #4172a6;
+      --cad-red: #ff7b72;
+      --cad-blue: #79c0ff;
+      --cad-amber: #ffa657;
+      --cad-green: #7ee787;
+      --hatch-bg: #091e36;
+      --border-outer: #a5d6ff;
+      --border-inner: #79c0ff;
+      --titleblock-bg: #0a2039;
+      --shadow-sheet: rgba(0, 0, 0, 0.8);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Chivo Mono', monospace;
+      background-color: var(--bg-workspace);
+      color: #cbd5e1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      font-size: 11px;
+    }
+
+    /* Top Command Header */
+    header.cad-toolbar {
+      background: #111827;
+      border-bottom: 2px solid #1f2937;
+      padding: 0.6rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    .project-header-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .cad-badge {
+      background: #0284c7;
+      color: #ffffff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .project-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #f8fafc;
+      text-transform: uppercase;
+    }
+
+    .project-sub {
+      font-size: 0.72rem;
+      color: #94a3b8;
+    }
+
+    .controls-cluster {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .btn-cad {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #475569;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-family: 'Chivo Mono', monospace;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease-in-out;
+    }
+
+    .btn-cad:hover {
+      background: #334155;
+      border-color: #64748b;
+      color: #ffffff;
+    }
+
+    .btn-cad.primary {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #ffffff;
+    }
+
+    .btn-cad.primary:hover {
+      background: #0369a1;
+    }
+
+    /* Architectural Sheet Navigation Bar */
+    nav.sheet-navigator {
+      background: #0d131f;
+      display: flex;
+      overflow-x: auto;
+      padding: 0.35rem 1rem 0;
+      border-bottom: 1px solid #1f2937;
+      gap: 0.35rem;
+    }
+
+    .sheet-tab {
+      background: #162032;
+      border: 1px solid #334155;
+      border-bottom: none;
+      color: #94a3b8;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.15s;
+    }
+
+    .sheet-tab span.sheet-id {
+      color: #38bdf8;
+      font-weight: 800;
+    }
+
+    .sheet-tab:hover {
+      background: #1e2d44;
+      color: #f1f5f9;
+    }
+
+    .sheet-tab.active {
+      background: var(--sheet-bg);
+      color: var(--ink-primary);
+      border-color: #64748b;
+      border-bottom: 2px solid #0284c7;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.25);
+    }
+
+    .sheet-tab.active span.sheet-id {
+      color: #0284c7;
+    }
+
+    body.blueprint-mode .sheet-tab.active {
+      background: #0d2847;
+      color: #f0f7ff;
+      border-color: #38bdf8;
+    }
+
+    /* Workspace / Drawing Viewport */
+    main.viewport {
+      flex: 1;
+      padding: 2rem 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      background-color: var(--bg-workspace);
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      overflow-y: auto;
+    }
+
+    /* Architectural Arch-D / 24x36 Proportion Sheet Container */
+    .arch-sheet {
+      width: 100%;
+      max-width: 1220px;
+      background: var(--sheet-bg);
+      color: var(--ink-primary);
+      box-shadow: 0 16px 40px var(--shadow-sheet);
+      padding: 18px;
+      position: relative;
+      display: none;
+      transition: background 0.25s, color 0.25s;
+    }
+
+    .arch-sheet.active {
+      display: block;
+    }
+
+    /* Double Border & Grid Coordinate System */
+    .arch-border-outer {
+      border: 3px solid var(--border-outer);
+      padding: 4px;
+      position: relative;
+    }
+
+    .arch-border-inner {
+      border: 1px solid var(--border-inner);
+      padding: 16px 16px 14px 16px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 820px;
+    }
+
+    /* Coordinate Markers (A-D, 1-8) around edge */
+    .coord-h, .coord-v {
+      position: absolute;
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--ink-dim);
+      display: flex;
+      justify-content: space-between;
+      user-select: none;
+    }
+    .coord-top { top: -14px; left: 20px; right: 20px; }
+    .coord-bottom { bottom: -14px; left: 20px; right: 20px; }
+    .coord-left { top: 20px; bottom: 20px; left: -14px; flex-direction: column; }
+    .coord-right { top: 20px; bottom: 20px; right: -14px; flex-direction: column; }
+
+    /* Sheet Drawing Area Grid */
+    .drawing-canvas {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Master Professional Title Block */
+    .master-titleblock {
+      margin-top: 14px;
+      border: 2px solid var(--border-outer);
+      display: grid;
+      grid-template-columns: 2.2fr 1.6fr 1.6fr 1fr 1.1fr;
+      background: var(--titleblock-bg);
+      font-size: 8px;
+      line-height: 1.25;
+    }
+
+    .tb-cell {
+      border-right: 1px solid var(--border-inner);
+      padding: 6px 9px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .tb-cell:last-child {
+      border-right: none;
+    }
+
+    .tb-label {
+      font-size: 7px;
+      font-weight: 800;
+      color: var(--ink-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 2px;
+      display: block;
+    }
+
+    .tb-content-main {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--ink-primary);
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    .tb-subtext {
+      font-size: 7.5px;
+      color: var(--ink-secondary);
+      margin-top: 3px;
+    }
+
+    .tb-sheet-num {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--cad-blue);
+      text-align: right;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    /* Detail / View Title Bubble */
+    .view-title-block {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 6px 0 10px 0;
+    }
+
+    .view-bubble {
+      width: 32px;
+      height: 32px;
+      border: 1.5px solid var(--ink-primary);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 800;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .view-bubble-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--ink-primary);
+      margin: 1px 0;
+    }
+
+    .view-title-text {
+      border-bottom: 1.5px solid var(--ink-primary);
+      padding-bottom: 2px;
+      flex: 1;
+    }
+
+    .view-title-main {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--ink-primary);
+    }
+
+    .view-title-scale {
+      font-size: 8px;
+      color: var(--ink-dim);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    /* SVG Blueprint Graphics Elements */
+    svg.arch-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: var(--hatch-bg);
+      border: 1px solid var(--border-inner);
+    }
+
+    /* North Arrow & Bar Scale SVG Symbols */
+    .symbol-cluster {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0.5rem 0;
+    }
+
+    /* Notes, Specifications & Schedule Tables */
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.5px;
+      margin: 8px 0;
+    }
+
+    .spec-table th, .spec-table td {
+      border: 1px solid var(--border-inner);
+      padding: 5px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .spec-table th {
+      background: rgba(0,0,0,0.04);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--ink-primary);
+    }
+
+    body.blueprint-mode .spec-table th {
+      background: rgba(255,255,255,0.08);
+    }
+
+    .keynotes-box {
+      border: 1px solid var(--border-inner);
+      padding: 10px 12px;
+      background: var(--hatch-bg);
+      font-size: 8px;
+      line-height: 1.45;
+    }
+
+    .keynotes-box h4 {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+      color: var(--cad-blue);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .keynotes-box ol, .keynotes-box ul {
+      margin-left: 14px;
+    }
+
+    .keynotes-box li {
+      margin-bottom: 4px;
+    }
+
+    .stamp-box {
+      border: 2px dashed var(--cad-red);
+      padding: 6px;
+      text-align: center;
+      color: var(--cad-red);
+      font-size: 7.5px;
+      font-weight: 700;
+      line-height: 1.25;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Print Formatting */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+      }
+      header.cad-toolbar, nav.sheet-navigator {
+        display: none !important;
+      }
+      main.viewport {
+        padding: 0 !important;
+        background: none !important;
+      }
+      .arch-sheet {
+        display: block !important;
+        max-width: 100% !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        page-break-after: always;
+        break-after: page;
+      }
+      .arch-sheet:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+      .arch-border-outer {
+        border-width: 2px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top CAD Workspace Header -->
+  <header class="cad-toolbar">
+    <div class="project-header-info">
+      <span class="cad-badge">CONSTRUCTION DOCS</span>
+      <div>
+        <div class="project-title">12' x 24' Mono-Pitch Storage Shed &amp; Workshop</div>
+        <div class="project-sub">CHEROKEE COUNTY, NC (MURPHY) | IRC PRESCRIPTIVE SUBMITTAL PACKAGE</div>
+      </div>
+    </div>
+    <div class="controls-cluster">
+      <button class="btn-cad" id="toggleThemeBtn" onclick="toggleBlueprintMode()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        <span id="themeBtnText">Blueprint View</span>
+      </button>
+      <button class="btn-cad primary" onclick="window.print()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        Print / Plot PDF
+      </button>
+    </div>
+  </header>
+
+  <!-- Sheet Selector Tabs -->
+  <nav class="sheet-navigator" id="sheetNavigator">
+    <button class="sheet-tab active" data-sheet="T-101"><span class="sheet-id">T-101</span> Title &amp; Code Box</button>
+    <button class="sheet-tab" data-sheet="S-101"><span class="sheet-id">S-101</span> Foundation &amp; Piers</button>
+    <button class="sheet-tab" data-sheet="S-102"><span class="sheet-id">S-102</span> Floor Framing</button>
+    <button class="sheet-tab" data-sheet="S-103"><span class="sheet-id">S-103</span> Wall Elevations</button>
+    <button class="sheet-tab" data-sheet="S-104"><span class="sheet-id">S-104</span> Roof &amp; Overhang Section</button>
+    <button class="sheet-tab" data-sheet="E-101"><span class="sheet-id">E-101</span> 60A Electrical Plan</button>
+    <button class="sheet-tab" data-sheet="M-101"><span class="sheet-id">M-101</span> Schedules &amp; Takeoff</button>
+  </nav>
+
+  <!-- Main Viewport containing the Sheets -->
+  <main class="viewport">
+
+    <!-- ========================================================= -->
+    <!-- SHEET T-101: COVER & CHEROKEE COUNTY CODE COMPLIANCE BOX   -->
+    <!-- ========================================================= -->
+    <div class="arch-sheet active" id="sheet-T-101">
+      <div class="arch-border-outer">
+        <div class="coord-h coord-top"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+        <div class="coord-h coord-bottom"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+        <div class="coord-v coord-left"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+        <div class="coord-v coord-right"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+
+        <div class="arch-border-inner">
+          <div class="drawing-canvas">
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-bottom: 6px;">
+              <div>
+                <h1 style="font-family:'Rajdhani', sans-serif; font-size: 26px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-primary); line-height:1;">
+                  PROJECT DATA &amp; GENERAL CODE COMPLIANCE
+                </h1>
+                <p style="font-size:9px; color:var(--ink-secondary); margin-top:3px;">
+                  CHEROKEE COUNTY BUILDING INSPECTIONS DEPARTMENT — OWNER-BUILDER SUBMITTAL SET
+                </p>
+              </div>
+              <div class="stamp-box">
+                NON-ENGINEERED PRESCRIPTIVE DESIGN<br>
+                MEETS 2018/CURRENT NC RESIDENTIAL CODE (NCRC)<br>
+                ACCESSORY STRUCTURE — GROUP U STORAGE
+              </div>
+            </div>
+
+            <!-- Graphic Site Layout & Project Index -->
+            <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px;">
+              <div>
+                <div class="view-title-block">
+                  <div class="view-bubble"><span>1</span><div class="view-bubble-divider"></div><span>T101</span></div>
+                  <div class="view-title-text">
+                    <div class="view-title-main">SITE PLAN &amp; SEPARATION MATRIX</div>
+                    <div class="view-title-scale">SCALE: NOT TO SCALE (DIAGRAMMATIC)</div>
+                  </div>
+                </div>
+
+                <svg class="arch-svg" viewBox="0 0 600 310" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Dimension Grids -->
+                  <defs>
+                    <pattern id="siteGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" stroke-opacity="0.06" stroke-width="1"/>
+                    </pattern>
+                  </defs>
+                  <rect width="600" height="310" fill="url(#siteGrid)"/>
+
+                  <!-- Property Boundary lines -->
+                  <rect x="25" y="25" width="550" height="260" fill="none" stroke="var(--ink-dim)" stroke-width="1.5" stroke-dasharray="12,3,3,3"/>
+                  <text x="35" y="40" fill="var(--ink-dim)" font-size="8" font-weight="700">PARCEL BOUNDARY (PROPERTY LINE)</text>
+
+                  <!-- Main Residence Footprint -->
+                  <rect x="60" y="70" width="160" height="150" fill="rgba(0,0,0,0.03)" stroke="var(--ink-primary)" stroke-width="2"/>
+                  <text x="140" y="145" fill="var(--ink-primary)" font-size="10" font-weight="700" text-anchor="middle">PRIMARY RESIDENCE</text>
+                  <text x="140" y="160" fill="var(--ink-secondary)" font-size="8" text-anchor="middle">MAIN ELECTRICAL SERVICE</text>
+
+                  <!-- Proposed 12'x24' Shed Footprint -->
+                  <rect x="360" y="110" width="170" height="90" fill="rgba(2,132,199,0.08)" stroke="var(--cad-blue)" stroke-width="2.5"/>
+                  <text x="445" y="150" fill="var(--cad-blue)" font-size="11" font-weight="800" text-anchor="middle">PROPOSED SHED</text>
+                  <text x="445" y="165" fill="var(--ink-secondary)" font-size="8" font-weight="600" text-anchor="middle">12'-0" x 24'-0" (288 SQ FT)</text>
+
+                  <!-- Underground Electrical Feeder Line (35'-40' run) -->
+                  <path d="M 220 145 L 360 145" fill="none" stroke="var(--cad-amber)" stroke-width="2.5" stroke-dasharray="6,3"/>
+                  <text x="290" y="137" fill="var(--cad-amber)" font-size="8" font-weight="700" text-anchor="middle">35'-40' UNDERGROUND TRENCH (18" DEPTH)</text>
+
+                  <!-- Setback Dimensions -->
+                  <!-- Side Setback -->
+                  <line x1="530" y1="155" x2="575" y2="155" stroke="var(--cad-red)" stroke-width="1.2"/>
+                  <path d="M 530 152 L 530 158 M 575 152 L 575 158" stroke="var(--cad-red)" stroke-width="1.2"/>
+                  <text x="552" y="148" fill="var(--cad-red)" font-size="8" font-weight="700" text-anchor="middle">&gt; 5'-0" MIN.</text>
+
+                  <!-- Rear Setback -->
+                  <line x1="445" y1="200" x2="445" y2="285" stroke="var(--cad-red)" stroke-width="1.2"/>
+                  <path d="M 442 200 L 448 200 M 442 285 L 448 285" stroke="var(--cad-red)" stroke-width="1.2"/>
+                  <text x="452" y="245" fill="var(--cad-red)" font-size="8" font-weight="700">10'-0" REAR SETBACK</text>
+
+                  <!-- Septic Clearance Callout -->
+                  <circle cx="390" cy="65" r="28" fill="none" stroke="var(--cad-green)" stroke-width="1.5" stroke-dasharray="4,3"/>
+                  <text x="390" y="65" fill="var(--cad-green)" font-size="7.5" font-weight="700" text-anchor="middle">SEPTIC TANK / FIELD</text>
+                  <text x="390" y="75" fill="var(--cad-green)" font-size="7" text-anchor="middle">(10' MIN. CLEARANCE)</text>
+                </svg>
+
+                <div class="symbol-cluster">
+                  <!-- Architectural North Arrow -->
+                  <svg width="45" height="45" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="var(--ink-primary)" stroke-width="2"/>
+                    <polygon points="50,15 62,50 50,42" fill="var(--ink-primary)"/>
+                    <polygon points="50,15 38,50 50,42" fill="none" stroke="var(--ink-primary)" stroke-width="1.5"/>
+                    <text x="50" y="72" font-family="'Rajdhani', sans-serif" font-size="20" font-weight="800" fill="var(--ink-primary)" text-anchor="middle">N</text>
+                  </svg>
+                  <div>
+                    <span style="font-size:7.5px; font-weight:800; text-transform:uppercase; color:var(--ink-dim);">Graphic Bar Scale</span>
+                    <!-- Graphic Bar Scale -->
+                    <svg width="200" height="22" viewBox="0 0 200 22">
+                      <rect x="0" y="8" width="50" height="6" fill="var(--ink-primary)"/>
+                      <rect x="50" y="8" width="50" height="6" fill="none" stroke="var(--ink-primary)" stroke-width="1"/>
+                      <rect x="100" y="8" width="50" height="6" fill="var(--ink-primary)"/>
+                      <rect x="150" y="8" width="50" height="6" fill="none" stroke="var(--ink-primary)" stroke-width="1"/>
+                      <text x="0" y="6" font-size="7" font-weight="700" fill="var(--ink-primary)">0</text>
+                      <text x="50" y="6" font-size="7" font-weight="700" fill="var(--ink-primary)">2'</text>
+                      <text x="100" y="6" font-size="7" font-weight="700" fill="var(--ink-primary)">4'</text>
+                      <text x="150" y="6" font-size="7" font-weight="700" fill="var(--ink-primary)">8'</text>
+                      <text x="200" y="6" font-size="7" font-weight="700" fill="var(--ink-primary)" text-anchor="end">12'</text>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right: Code Criteria Box & Drawing Index -->
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div class="keynotes-box" style="border-left: 3px solid var(--cad-blue);">
+                  <h4>CHEROKEE COUNTY STRUCTURAL DESIGN CRITERIA</h4>
+                  <ul>
+                    <li><strong>Governing Building Code:</strong> 2018 North Carolina Residential Code (NCRC / IRC).</li>
+                    <li><strong>Governing Electrical Code:</strong> 2020/2023 National Electrical Code (NEC / NFPA 70).</li>
+                    <li><strong>Ground Snow Load ($S_g$):</strong> 20 psf (Standard elevation &lt; 3,000 ft in Murphy, NC).</li>
+                    <li><strong>Design Wind Speed ($V_{ult}$):</strong> 115 mph (3-second peak gust, Exposure Category B).</li>
+                    <li><strong>Frost Line Depth:</strong> 12" min. per code (18" minimum target specified on downhill sloped footings).</li>
+                    <li><strong>Soil Bearing Capacity:</strong> Presumed 1,500 psf minimum (native undisturbed clay/shale).</li>
+                    <li><strong>Termite Infestation Hazard:</strong> Very Heavy (Treated framing for all members &lt; 8" of grade).</li>
+                  </ul>
+                </div>
+
+                <div class="keynotes-box">
+                  <h4>DOCUMENT INDEX / SHEET SCHEDULE</h4>
+                  <table class="spec-table" style="margin: 4px 0 0 0;">
+                    <thead>
+                      <tr><th>Sheet</th><th>Title</th><th>Rev</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td><strong>T-101</strong></td><td>Cover, Site Plan &amp; Code Compliance Box</td><td>1.4</td></tr>
+                      <tr><td><strong>S-101</strong></td><td>Foundation &amp; Concrete Pier Plan</td><td>1.4</td></tr>
+                      <tr><td><strong>S-102</strong></td><td>Floor Framing &amp; Decking Plan</td><td>1.4</td></tr>
+                      <tr><td><strong>S-103</strong></td><td>Wall Framing Elevations &amp; Bearing Header</td><td>1.4</td></tr>
+                      <tr><td><strong>S-104</strong></td><td>Mono-Pitch Rafter Section &amp; Overhangs</td><td>1.4</td></tr>
+                      <tr><td><strong>E-101</strong></td><td>60A Electrical Feeder, Trench &amp; Branch Plan</td><td>1.4</td></tr>
+                      <tr><td><strong>M-101</strong></td><td>General Notes, Schedules &amp; Lumber Takeoff</td><td>1.4</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Title Block -->
+          <div class="master-titleblock">
+            <div class="tb-cell">
+              <span class="tb-label">Project &amp; Location</span>
+              <div class="tb-content-main">12'x24' MONO-PITCH STORAGE SHED</div>
+              <div class="tb-subtext">PARCEL ID: CHEROKEE CO. | MURPHY, NC 28906</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Drawing Title</span>
+              <div class="tb-content-main">COVER &amp; PROJECT DATA</div>
+              <div class="tb-subtext">ZONING, CRITERIA &amp; INDEX</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Design Standard / Path</span>
+              <div class="tb-content-main">IRC PRESCRIPTIVE PATH</div>
+              <div class="tb-subtext">NO ENGINEERING REQUIRED</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Date &amp; Scale</span>
+              <div class="tb-content-main">OCTOBER 2026</div>
+              <div class="tb-subtext">AS NOTED</div>
+            </div>
+            <div class="tb-cell" style="background: rgba(2,132,199,0.06);">
+              <span class="tb-label">Sheet Number</span>
+              <div class="tb-sheet-num">T-101</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- SHEET S-101: FOUNDATION & CONCRETE PIER PLAN               -->
+    <!-- ========================================================= -->
+    <div class="arch-sheet" id="sheet-S-101">
+      <div class="arch-border-outer">
+        <div class="coord-h coord-top"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+        <div class="coord-h coord-bottom"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+        <div class="coord-v coord-left"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+        <div class="coord-v coord-right"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+
+        <div class="arch-border-inner">
+          <div class="drawing-canvas">
+
+            <div class="view-title-block">
+              <div class="view-bubble"><span>1</span><div class="view-bubble-divider"></div><span>S101</span></div>
+              <div class="view-title-text">
+                <div class="view-title-main">FOUNDATION &amp; PIER GRID PLAN (SLOPED SITE)</div>
+                <div class="view-title-scale">SCALE: 1/4" = 1'-0"</div>
+              </div>
+            </div>
+
+            <!-- Foundation Plan SVG -->
+            <svg class="arch-svg" viewBox="0 0 920 440" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <!-- Architectural Dimension Slash Marker -->
+                <marker id="archTick" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                  <line x1="1" y1="9" x2="9" y2="1" stroke="var(--cad-red)" stroke-width="1.8"/>
+                </marker>
+              </defs>
+
+              <!-- Dimension: 24'-0" Overall Length -->
+              <line x1="120" y1="36" x2="840" y2="36" stroke="var(--cad-red)" stroke-width="1.2" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+              <line x1="120" y1="28" x2="120" y2="44" stroke="var(--cad-red)" stroke-width="1"/>
+              <line x1="840" y1="28" x2="840" y2="44" stroke="var(--cad-red)" stroke-width="1"/>
+              <text x="480" y="30" fill="var(--cad-red)" font-size="11" font-weight="700" text-anchor="middle">24'-0" (OVERALL GIRDER LENGTH)</text>
+
+              <!-- Bay Spacings: 8'-0" increments -->
+              <line x1="120" y1="60" x2="360" y2="60" stroke="var(--cad-red)" stroke-width="1" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+              <line x1="360" y1="60" x2="600" y2="60" stroke="var(--cad-red)" stroke-width="1" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+              <line x1="600" y1="60" x2="840" y2="60" stroke="var(--cad-red)" stroke-width="1" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+              <text x="240" y="55" fill="var(--cad-red)" font-size="9" text-anchor="middle">8'-0" C-C</text>
+              <text x="480" y="55" fill="var(--cad-red)" font-size="9" text-anchor="middle">8'-0" C-C</text>
+              <text x="720" y="55" fill="var(--cad-red)" font-size="9" text-anchor="middle">8'-0" C-C</text>
+
+              <!-- Dimension: 12'-0" Overall Width & Spans -->
+              <line x1="65" y1="90" x2="65" y2="390" stroke="var(--cad-red)" stroke-width="1.2" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+              <text x="50" y="240" fill="var(--cad-red)" font-size="11" font-weight="700" text-anchor="middle" transform="rotate(-90 50 240)">12'-0" (OVERALL WIDTH)</text>
+
+              <line x1="88" y1="90" x2="88" y2="240" stroke="var(--cad-red)" stroke-width="1" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+              <line x1="88" y1="240" x2="88" y2="390" stroke="var(--cad-red)" stroke-width="1" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+              <text x="80" y="165" fill="var(--cad-red)" font-size="8.5" text-anchor="middle" transform="rotate(-90 80 165)">5'-0" C-C</text>
+              <text x="80" y="315" fill="var(--cad-red)" font-size="8.5" text-anchor="middle" transform="rotate(-90 80 315)">5'-0" C-C</text>
+
+              <!-- (3) Continuous 6x6 PT Girders -->
+              <!-- Girder 1 (Front High Side - Door Wall) -->
+              <rect x="110" y="82" width="740" height="16" fill="rgba(217,119,6,0.12)" stroke="var(--cad-amber)" stroke-width="1.8"/>
+              <text x="860" y="94" fill="var(--cad-amber)" font-size="9" font-weight="700">6x6 PT GIRDER #1 (12' FRONT BEARING WALL)</text>
+
+              <!-- Girder 2 (Center Spine) -->
+              <rect x="110" y="232" width="740" height="16" fill="rgba(217,119,6,0.12)" stroke="var(--cad-amber)" stroke-width="1.8"/>
+              <text x="860" y="244" fill="var(--cad-amber)" font-size="9" font-weight="700">6x6 PT GIRDER #2 (CENTER SPINE)</text>
+
+              <!-- Girder 3 (Rear Low Side - 10' Wall) -->
+              <rect x="110" y="382" width="740" height="16" fill="rgba(217,119,6,0.12)" stroke="var(--cad-amber)" stroke-width="1.8"/>
+              <text x="860" y="394" fill="var(--cad-amber)" font-size="9" font-weight="700">6x6 PT GIRDER #3 (10' REAR BEARING WALL)</text>
+
+              <!-- Center Door Marker on 24' Wall (Girder 1) -->
+              <rect x="420" y="74" width="120" height="8" fill="var(--cad-red)" stroke="var(--border-outer)" stroke-width="1"/>
+              <text x="480" y="70" fill="var(--cad-red)" font-size="8.5" font-weight="800" text-anchor="middle">6'-0" DOUBLE ENTRANCE DOOR CENTERED ON 24' FRONT WALL</text>
+
+              <!-- 12 Footings (18" Pad + 12" Sonotube + 6x6 Post Base) -->
+              <!-- Row 1 -->
+              <g id="piers">
+                <!-- Col 1 -->
+                <circle cx="120" cy="90" r="20" fill="none" stroke="var(--ink-dim)" stroke-width="1.2" stroke-dasharray="3,3"/>
+                <circle cx="120" cy="90" r="13" fill="rgba(0,0,0,0.06)" stroke="var(--ink-primary)" stroke-width="1.6"/>
+                <rect x="115" y="85" width="10" height="10" fill="var(--cad-blue)"/>
+
+                <!-- Col 2 -->
+                <circle cx="360" cy="90" r="20" fill="none" stroke="var(--ink-dim)" stroke-width="1.2" stroke-dasharray="3,3"/>
+                <circle cx="360" cy="90" r="13" fill="rgba(0,0,0,0.06)" stroke="var(--ink-primary)" stroke-width="1.6"/>
+                <rect x="355" y="85" width="10" height="10" fill="var(--cad-blue)"/>
+
+                <!-- Col 3 -->
+                <circle cx="600" cy="90" r="20" fill="none" stroke="var(--ink-dim)" stroke-width="1.2" stroke-dasharray="3,3"/>
+                <circle cx="600" cy="90" r="13" fill="rgba(0,0,0,0.06)" stroke="var(--ink-primary)" stroke-width="1.6"/>
+                <rect x="595" y="85" width="10" height="10" fill="var(--cad-blue)"/>
+
+                <!-- Col 4 -->
+                <circle cx="840" cy="90" r="20" fill="none" stroke="var(--ink-dim)" stroke-width="1.2" stroke-dasharray="3,3"/>
+                <circle cx="840" cy="90" r="13" fill="rgba(0,0,0,0.06)" stroke="var(--ink-primary)" stroke-width="1.6"/>
+                <rect x="835" y="85" width="10" height="10" fill="var(--cad-blue)"/>
+
+                <!-- Row 2 -->
+                <circle cx="120" cy="240" r="20" fill="none" stroke="var(--ink-dim)" stroke-width="1.2" stroke-dasharray="3,3"/>
+                <circle cx="120" cy="240" r="13" fill="rgba(0,0,0,0.06)" stroke="var(--ink-primary)" stroke-width="1.6"/>
+                <rect x="115" y="235" width="10" height="10" fill="var(--cad-blue)"/>
+
+                <circle cx="360" cy="240" r="20" fill="none" stroke="var(--ink-dim)" stroke-width="1.2" stroke-dasharray="3,3"/>
+                <circle cx="360" cy="240" r="13" fill="rgba(0,0,0,0.06)" stroke="var(--ink-primary)" stroke-width="1.6"/>
+                <rect x="355" y="235" width="10" height="10" fill="var(--cad-blue)"/>
+
+                <circle cx="600" cy="240" r="20" fill="none" stroke="var(--ink-dim)" stroke-width="1.2" stroke-dasharray="3,3"/>
+                <circle cx="600" cy="240" r="13" fill="rgba(0,0,0,0.06)" stroke="var(--ink-primary)" stroke-width="1.6"/>
+                <rect x="595" y="235" width="10" height="10" fill="var(--cad-blue)"/>
+
+                <circle cx="840" cy="240" r="20" fill="none" stroke="var(--ink-dim)" stroke-width="1.2" stroke-dasharray="3,3"/>
+                <circle cx="840" cy="240" r="13" fill="rgba(0,0,0,0.06)" stroke="var(--ink-primary)" stroke-width="1.6"/>
+                <rect x="835" y="235" width="10" height="10" fill="var(--cad-blue)"/>
+
+                <!-- Row 3 -->
+                <circle cx="120" cy="390" r="20" fill="none" stroke="var(--ink-dim)" stroke-width="1.2" stroke-dasharray="3,3"/>
+                <circle cx="120" cy="390" r="13" fill="rgba(0,0,0,0.06)" stroke="var(--ink-primary)" stroke-width="1.6"/>
+                <rect x="115" y="385" width="10" height="10" fill="var(--cad-blue)"/>
+
+                <circle cx="360" cy="390" r="20" fill="none" stroke="var(--ink-dim)" stroke-width="1.2" stroke-dasharray="3,3"/>
+                <circle cx="360" cy="390" r="13" fill="rgba(0,0,0,0.06)" stroke="var(--ink-primary)" stroke-width="1.6"/>
+                <rect x="355" y="385" width="10" height="10" fill="var(--cad-blue)"/>
+
+                <circle cx="600" cy="390" r="20" fill="none" stroke="var(--ink-dim)" stroke-width="1.2" stroke-dasharray="3,3"/>
+                <circle cx="600" cy="390" r="13" fill="rgba(0,0,0,0.06)" stroke="var(--ink-primary)" stroke-width="1.6"/>
+                <rect x="595" y="385" width="10" height="10" fill="var(--cad-blue)"/>
+
+                <circle cx="840" cy="390" r="20" fill="none" stroke="var(--ink-dim)" stroke-width="1.2" stroke-dasharray="3,3"/>
+                <circle cx="840" cy="390" r="13" fill="rgba(0,0,0,0.06)" stroke="var(--ink-primary)" stroke-width="1.6"/>
+                <rect x="835" y="385" width="10" height="10" fill="var(--cad-blue)"/>
+              </g>
+
+              <!-- Detail Leader 1: Pier Assembly -->
+              <path d="M 360 90 L 415 130 L 520 130" fill="none" stroke="var(--cad-blue)" stroke-width="1.2"/>
+              <text x="525" y="126" fill="var(--cad-blue)" font-size="9" font-weight="700">CONCRETE PIER DETAIL (12 TOTAL):</text>
+              <text x="525" y="140" fill="var(--ink-secondary)" font-size="8">• 18" Dia. x 8" Thick 3,000 PSI Concrete Footing Pad</text>
+              <text x="525" y="152" fill="var(--ink-secondary)" font-size="8">• 12" Dia. Sonotube Pier with (2) #4 Rebar Verticals</text>
+              <text x="525" y="164" fill="var(--ink-secondary)" font-size="8">• Simpson PBS66 HDG Elevated Standoff Post Base</text>
+
+              <!-- Detail Leader 2: Lateral Knee Bracing -->
+              <path d="M 600 240 L 645 285 L 750 285" fill="none" stroke="var(--cad-amber)" stroke-width="1.2"/>
+              <text x="755" y="281" fill="var(--cad-amber)" font-size="9" font-weight="700">POST &amp; SWAY BRACE CALLOUT:</text>
+              <text x="755" y="295" fill="var(--ink-secondary)" font-size="8">• 6x6 PT Southern Pine Post Stubs (&lt; 4'-0" rise)</text>
+              <text x="755" y="307" fill="var(--ink-secondary)" font-size="8">• 4x4 PT 45° Diagonal Knee Braces on posts &gt; 24"</text>
+              <text x="755" y="319" fill="var(--ink-secondary)" font-size="8">• Fastened with 1/2" Hot-Dipped Galvanized Carriage Bolts</text>
+            </svg>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px;">
+              <div class="keynotes-box">
+                <h4>FOUNDATION SPECIFICATIONS &amp; FROST DEPTH</h4>
+                <ul>
+                  <li><strong>Excavation Depth:</strong> Footing bottom must be a minimum of <strong>18 inches below grade</strong>, measured from the downhill exposed face into virgin, undisturbed soil.</li>
+                  <li><strong>Concrete Specification:</strong> Ready-mix or bag-mix achieving $f'_c \ge 3,000 \text{ psi}$ compressive strength at 28 days. Total required: 36 bags (80 lb).</li>
+                  <li><strong>Anchor Hardware:</strong> Cast-in-place Simpson Strong-Tie PBS66 elevated bases with 1" standoff clearance above concrete to prevent wood rot.</li>
+                </ul>
+              </div>
+              <div class="keynotes-box">
+                <h4>SLOPED TERRAIN LATERAL STABILITY NOTES</h4>
+                <ul>
+                  <li><strong>Post Height Threshold:</strong> Post height varies along slope from ~6" uphill to ~40" downhill, strictly remaining below the 48" non-engineered code limit.</li>
+                  <li><strong>Girder Splices:</strong> 6x6 girders must splice directly over the center of the 6x6 intermediate posts with full 2-3/4" minimum bearing for each timber end.</li>
+                  <li><strong>Cap Ties:</strong> Secure girders to posts with Simpson AC6 or PC66 heavy gauge caps.</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="master-titleblock">
+            <div class="tb-cell">
+              <span class="tb-label">Project &amp; Location</span>
+              <div class="tb-content-main">12'x24' MONO-PITCH STORAGE SHED</div>
+              <div class="tb-subtext">PARCEL ID: CHEROKEE CO. | MURPHY, NC 28906</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Drawing Title</span>
+              <div class="tb-content-main">FOUNDATION &amp; PIER PLAN</div>
+              <div class="tb-subtext">SLOPED SITE PIER SCHEDULE &amp; BRACING</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Design Standard / Path</span>
+              <div class="tb-content-main">IRC PRESCRIPTIVE PATH</div>
+              <div class="tb-subtext">NCRC SECTION R403 / TABLE R507.8</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Scale &amp; Date</span>
+              <div class="tb-content-main">1/4" = 1'-0"</div>
+              <div class="tb-subtext">OCTOBER 2026</div>
+            </div>
+            <div class="tb-cell" style="background: rgba(2,132,199,0.06);">
+              <span class="tb-label">Sheet Number</span>
+              <div class="tb-sheet-num">S-101</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- SHEET S-102: FLOOR FRAMING & DECKING PLAN                  -->
+    <!-- ========================================================= -->
+    <div class="arch-sheet" id="sheet-S-102">
+      <div class="arch-border-outer">
+        <div class="coord-h coord-top"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+        <div class="coord-h coord-bottom"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+        <div class="coord-v coord-left"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+        <div class="coord-v coord-right"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+
+        <div class="arch-border-inner">
+          <div class="drawing-canvas">
+
+            <div class="view-title-block">
+              <div class="view-bubble"><span>1</span><div class="view-bubble-divider"></div><span>S102</span></div>
+              <div class="view-title-text">
+                <div class="view-title-main">FLOOR JOIST FRAMING &amp; SUBFLOOR LAYOUT</div>
+                <div class="view-title-scale">SCALE: 1/4" = 1'-0"</div>
+              </div>
+            </div>
+
+            <!-- Floor Framing Plan SVG -->
+            <svg class="arch-svg" viewBox="0 0 920 440" xmlns="http://www.w3.org/2000/svg">
+              <!-- Outer Rim Joist Boundary: 12' x 24' -->
+              <rect x="120" y="80" width="720" height="300" fill="none" stroke="var(--ink-primary)" stroke-width="3"/>
+              
+              <!-- (3) Girders Running Underneath (Dashed Amber) -->
+              <line x1="120" y1="105" x2="840" y2="105" stroke="var(--cad-amber)" stroke-width="2.5" stroke-dasharray="8,4"/>
+              <line x1="120" y1="230" x2="840" y2="230" stroke="var(--cad-amber)" stroke-width="2.5" stroke-dasharray="8,4"/>
+              <line x1="120" y1="355" x2="840" y2="355" stroke="var(--cad-amber)" stroke-width="2.5" stroke-dasharray="8,4"/>
+              <text x="850" y="234" fill="var(--cad-amber)" font-size="8.5" font-weight="700">6x6 PT GIRDER CENTERLINE</text>
+
+              <!-- Floor Joists (2x6 PT @ 16" o.c. Spanning 12'-0") -->
+              <g stroke="var(--cad-blue)" stroke-width="1.6">
+                <!-- 24 feet = 18 joist bays @ 16" oc (every 40px) -->
+                <line x1="160" y1="80" x2="160" y2="380"/><line x1="200" y1="80" x2="200" y2="380"/>
+                <line x1="240" y1="80" x2="240" y2="380"/><line x1="280" y1="80" x2="280" y2="380"/>
+                <line x1="320" y1="80" x2="320" y2="380"/><line x1="360" y1="80" x2="360" y2="380"/>
+                <line x1="400" y1="80" x2="400" y2="380"/><line x1="440" y1="80" x2="440" y2="380"/>
+                <line x1="480" y1="80" x2="480" y2="380"/><line x1="520" y1="80" x2="520" y2="380"/>
+                <line x1="560" y1="80" x2="560" y2="380"/><line x1="600" y1="80" x2="600" y2="380"/>
+                <line x1="640" y1="80" x2="640" y2="380"/><line x1="680" y1="80" x2="680" y2="380"/>
+                <line x1="720" y1="80" x2="720" y2="380"/><line x1="760" y1="80" x2="760" y2="380"/>
+                <line x1="800" y1="80" x2="800" y2="380"/>
+              </g>
+
+              <!-- Center Door Sill Reinforcement on Front Rim -->
+              <rect x="420" y="75" width="120" height="10" fill="var(--cad-red)" stroke="var(--border-outer)" stroke-width="1.2"/>
+              <text x="480" y="68" fill="var(--cad-red)" font-size="8.5" font-weight="700" text-anchor="middle">DOUBLE RIM JOIST UNDER 6'-0" FRONT DOOR THRESHOLD</text>
+
+              <!-- Subfloor Panel 4x8 Seam Stagger Pattern (Dashed Thin Grey) -->
+              <g stroke="var(--ink-fine)" stroke-width="1" stroke-dasharray="4,3">
+                <line x1="120" y1="180" x2="840" y2="180"/>
+                <line x1="120" y1="280" x2="840" y2="280"/>
+                <line x1="360" y1="80" x2="360" y2="180"/>
+                <line x1="600" y1="80" x2="600" y2="180"/>
+                <line x1="480" y1="180" x2="480" y2="280"/>
+                <line x1="720" y1="180" x2="720" y2="280"/>
+                <line x1="360" y1="280" x2="360" y2="380"/>
+                <line x1="600" y1="280" x2="600" y2="380"/>
+              </g>
+
+              <!-- Dimensions -->
+              <line x1="120" y1="40" x2="840" y2="40" stroke="var(--cad-red)" stroke-width="1.2" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+              <text x="480" y="32" fill="var(--cad-red)" font-size="11" font-weight="700" text-anchor="middle">24'-0" (PT RIM JOISTS)</text>
+
+              <line x1="70" y1="80" x2="70" y2="380" stroke="var(--cad-red)" stroke-width="1.2" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+              <text x="56" y="230" fill="var(--cad-red)" font-size="11" font-weight="700" text-anchor="middle" transform="rotate(-90 56 230)">12'-0" (2x6 JOIST SPAN)</text>
+
+              <!-- Detail Callout -->
+              <path d="M 280 230 L 325 160 L 415 160" fill="none" stroke="var(--cad-blue)" stroke-width="1.2"/>
+              <text x="420" y="157" fill="var(--cad-blue)" font-size="9" font-weight="700">FLOOR FRAMING ASSEMBLY:</text>
+              <text x="420" y="171" fill="var(--ink-secondary)" font-size="8">• 2x6 No. 2 PT Joists spaced at 16" on-center</text>
+              <text x="420" y="183" fill="var(--ink-secondary)" font-size="8">• Simpson Strong-Tie H2.5A hurricane ties at each girder line</text>
+              <text x="420" y="195" fill="var(--ink-secondary)" font-size="8">• 3/4" Tongue &amp; Groove exterior-rated subfloor (Advantech / ProStruct)</text>
+              <text x="420" y="207" fill="var(--ink-secondary)" font-size="8">• Stagger panel joints 48" min.; apply polyurethane adhesive bead</text>
+            </svg>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px;">
+              <div class="keynotes-box">
+                <h4>LIVE / DEAD LOAD SPAN CAPACITIES</h4>
+                <ul>
+                  <li><strong>Clear Span:</strong> 5'-0" girder spacing creates two clear 4'-7" interior spans with 1'-0" end overhangs.</li>
+                  <li><strong>Prescriptive Capacity:</strong> NCRC Table R507.6 allows 2x6 No. 2 Southern Pine up to 9'-11" clear span for 40 psf live / 10 psf dead load. Over a 5' span, live load capacity easily exceeds <strong>100+ psf</strong>, handling mowers, tools, and heavy storage.</li>
+                </ul>
+              </div>
+              <div class="keynotes-box">
+                <h4>FASTENER &amp; SUBFLOOR SPECIFICATION</h4>
+                <ul>
+                  <li><strong>Nailing Schedule:</strong> 8d ring-shank hot-dipped galvanized nails (2-1/2" x 0.131") or 2-1/2" structural floor screws spaced 6" o.c. on edge seams, 12" o.c. along intermediate joists.</li>
+                  <li><strong>Moisture Expansion Gap:</strong> 1/8" gap required at all 4x8 panel butt joints to accommodate mountain humidity without buckling.</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="master-titleblock">
+            <div class="tb-cell">
+              <span class="tb-label">Project &amp; Location</span>
+              <div class="tb-content-main">12'x24' MONO-PITCH STORAGE SHED</div>
+              <div class="tb-subtext">PARCEL ID: CHEROKEE CO. | MURPHY, NC 28906</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Drawing Title</span>
+              <div class="tb-content-main">FLOOR FRAMING &amp; DECKING PLAN</div>
+              <div class="tb-subtext">2x6 JOISTS @ 16" O.C. &amp; SUBFLOOR LAYOUT</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Design Standard / Path</span>
+              <div class="tb-content-main">IRC PRESCRIPTIVE PATH</div>
+              <div class="tb-subtext">NCRC SECTION R502 / TABLE R507.6</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Scale &amp; Date</span>
+              <div class="tb-content-main">1/4" = 1'-0"</div>
+              <div class="tb-subtext">OCTOBER 2026</div>
+            </div>
+            <div class="tb-cell" style="background: rgba(2,132,199,0.06);">
+              <span class="tb-label">Sheet Number</span>
+              <div class="tb-sheet-num">S-102</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- SHEET S-103: WALL FRAMING ELEVATIONS & DOOR DETAIL         -->
+    <!-- ========================================================= -->
+    <div class="arch-sheet" id="sheet-S-103">
+      <div class="arch-border-outer">
+        <div class="coord-h coord-top"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+        <div class="coord-h coord-bottom"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+        <div class="coord-v coord-left"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+        <div class="coord-v coord-right"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+
+        <div class="arch-border-inner">
+          <div class="drawing-canvas">
+
+            <!-- Elevations SVG -->
+            <svg class="arch-svg" viewBox="0 0 920 490" xmlns="http://www.w3.org/2000/svg">
+              <!-- VIEW A: FRONT 12' BEARING WALL WITH CENTER 6' DOUBLE DOOR -->
+              <g transform="translate(40, 20)">
+                <text x="0" y="14" fill="var(--ink-primary)" font-family="'Rajdhani', sans-serif" font-size="12" font-weight="700">ELEVATION A: FRONT BEARING WALL (12'-0" TALL) — CENTERED 6'-0" DOUBLE DOOR</text>
+                
+                <!-- 12' Tall x 24' Wall Outline -->
+                <rect x="0" y="24" width="480" height="240" fill="rgba(2,132,199,0.03)" stroke="var(--ink-primary)" stroke-width="2"/>
+                <!-- Plates -->
+                <line x1="0" y1="28" x2="480" y2="28" stroke="var(--ink-primary)" stroke-width="1.8"/>
+                <line x1="0" y1="33" x2="480" y2="33" stroke="var(--ink-primary)" stroke-width="1.8"/>
+                <line x1="0" y1="260" x2="480" y2="260" stroke="var(--ink-primary)" stroke-width="1.8"/>
+
+                <!-- Mid-Height Fire-Blocking at 6'-0" (Both Sides of Door) -->
+                <line x1="0" y1="144" x2="175" y2="144" stroke="var(--cad-red)" stroke-width="2"/>
+                <line x1="305" y1="144" x2="480" y2="144" stroke="var(--cad-red)" stroke-width="2"/>
+                <text x="485" y="147" fill="var(--cad-red)" font-size="7.5" font-weight="700">2x4 BLOCKING @ 6'-0"</text>
+
+                <!-- Left Stud Field (Studs @ 12" o.c. = 20px) -->
+                <g stroke="var(--cad-blue)" stroke-width="1.2">
+                  <line x1="20" y1="33" x2="20" y2="260"/><line x1="40" y1="33" x2="40" y2="260"/>
+                  <line x1="60" y1="33" x2="60" y2="260"/><line x1="80" y1="33" x2="80" y2="260"/>
+                  <line x1="100" y1="33" x2="100" y2="260"/><line x1="120" y1="33" x2="120" y2="260"/>
+                  <line x1="140" y1="33" x2="140" y2="260"/><line x1="160" y1="33" x2="160" y2="260"/>
+                </g>
+
+                <!-- CENTER DOOR OPENING (Rough Opening 74" Wide x 82" High) centered at x=240 -->
+                <rect x="180" y="127" width="120" height="133" fill="var(--sheet-bg)" stroke="var(--cad-red)" stroke-width="2"/>
+                <!-- Double 2x10 Bearing Header + 1/2" OSB Spacer -->
+                <rect x="168" y="109" width="144" height="18" fill="rgba(217,119,6,0.2)" stroke="var(--cad-amber)" stroke-width="1.8"/>
+                <text x="240" y="122" fill="var(--cad-amber)" font-size="8" font-weight="700" text-anchor="middle">(2) 2x10 BEARING HEADER + 1/2" SPACER</text>
+
+                <!-- Cripple Studs above Header (12" o.c.) -->
+                <g stroke="var(--cad-blue)" stroke-width="1.2">
+                  <line x1="200" y1="33" x2="200" y2="109"/>
+                  <line x1="220" y1="33" x2="220" y2="109"/>
+                  <line x1="240" y1="33" x2="240" y2="109"/>
+                  <line x1="260" y1="33" x2="260" y2="109"/>
+                  <line x1="280" y1="33" x2="280" y2="109"/>
+                </g>
+
+                <!-- Double Jack + King Stud on Each Jamb -->
+                <line x1="168" y1="33" x2="168" y2="260" stroke="var(--cad-amber)" stroke-width="1.8"/>
+                <line x1="173" y1="127" x2="173" y2="260" stroke="var(--cad-blue)" stroke-width="1.8"/>
+                <line x1="178" y1="127" x2="178" y2="260" stroke="var(--cad-blue)" stroke-width="1.8"/>
+
+                <line x1="302" y1="127" x2="302" y2="260" stroke="var(--cad-blue)" stroke-width="1.8"/>
+                <line x1="307" y1="127" x2="307" y2="260" stroke="var(--cad-blue)" stroke-width="1.8"/>
+                <line x1="312" y1="33" x2="312" y2="260" stroke="var(--cad-amber)" stroke-width="1.8"/>
+
+                <!-- Door Leaf Outline & Swing -->
+                <rect x="182" y="129" width="57" height="129" fill="none" stroke="var(--ink-dim)" stroke-width="1.2"/>
+                <line x1="182" y1="258" x2="239" y2="129" stroke="var(--ink-dim)" stroke-width="1" stroke-dasharray="3,2"/>
+                <rect x="241" y="129" width="57" height="129" fill="none" stroke="var(--ink-dim)" stroke-width="1.2"/>
+                <line x1="298" y1="258" x2="241" y2="129" stroke="var(--ink-dim)" stroke-width="1" stroke-dasharray="3,2"/>
+                <text x="240" y="195" fill="var(--cad-red)" font-size="8.5" font-weight="700" text-anchor="middle">CENTERED 6'-0" R.O. DOUBLE ENTRANCE</text>
+
+                <!-- Right Stud Field (12" o.c.) -->
+                <g stroke="var(--cad-blue)" stroke-width="1.2">
+                  <line x1="332" y1="33" x2="332" y2="260"/><line x1="352" y1="33" x2="352" y2="260"/>
+                  <line x1="372" y1="33" x2="372" y2="260"/><line x1="392" y1="33" x2="392" y2="260"/>
+                  <line x1="412" y1="33" x2="412" y2="260"/><line x1="432" y1="33" x2="432" y2="260"/>
+                  <line x1="452" y1="33" x2="452" y2="260"/><line x1="472" y1="33" x2="472" y2="260"/>
+                </g>
+                <text x="90" y="250" fill="var(--cad-blue)" font-size="8" font-weight="700">2x4 @ 12" O.C.</text>
+                <text x="390" y="250" fill="var(--cad-blue)" font-size="8" font-weight="700">2x4 @ 12" O.C.</text>
+
+                <!-- 12' Height Dimension -->
+                <line x1="-15" y1="24" x2="-15" y2="264" stroke="var(--cad-red)" stroke-width="1.2" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+                <text x="-25" y="144" fill="var(--cad-red)" font-size="9" font-weight="700" text-anchor="middle" transform="rotate(-90 -25 144)">12'-0" TALL</text>
+              </g>
+
+              <!-- VIEW B: 12' SOLID SIDE GABLE RAKE WALL -->
+              <g transform="translate(580, 20)">
+                <text x="0" y="14" fill="var(--ink-primary)" font-family="'Rajdhani', sans-serif" font-size="12" font-weight="700">ELEVATION B: SOLID 12' GABLE RAKE WALL (TYP. BOTH ENDS)</text>
+                <polygon points="0,24 240,64 240,264 0,264" fill="rgba(217,119,6,0.03)" stroke="var(--ink-primary)" stroke-width="2"/>
+                <line x1="0" y1="260" x2="240" y2="260" stroke="var(--ink-primary)" stroke-width="2"/>
+
+                <!-- Studs @ 16" o.c. -->
+                <g stroke="var(--cad-blue)" stroke-width="1.2">
+                  <line x1="27" y1="28" x2="27" y2="260"/><line x1="53" y1="33" x2="53" y2="260"/>
+                  <line x1="80" y1="37" x2="80" y2="260"/><line x1="107" y1="42" x2="107" y2="260"/>
+                  <line x1="133" y1="46" x2="133" y2="260"/><line x1="160" y1="51" x2="160" y2="260"/>
+                  <line x1="187" y1="55" x2="187" y2="260"/><line x1="213" y1="60" x2="213" y2="260"/>
+                </g>
+                <text x="120" y="150" fill="var(--cad-blue)" font-size="9" font-weight="700" text-anchor="middle">SOLID SHEAR BRACED WALL</text>
+                <text x="120" y="164" fill="var(--ink-dim)" font-size="8" text-anchor="middle">(NO OPENINGS — 2x4 @ 16" O.C.)</text>
+              </g>
+
+              <!-- VIEW C: REAR 10' BEARING WALL -->
+              <g transform="translate(40, 310)">
+                <text x="0" y="14" fill="var(--ink-primary)" font-family="'Rajdhani', sans-serif" font-size="12" font-weight="700">ELEVATION C: REAR BEARING WALL (10'-0" TALL — 2x4 STUDS @ 16" O.C.)</text>
+                <rect x="0" y="24" width="480" height="120" fill="rgba(2,132,199,0.03)" stroke="var(--ink-primary)" stroke-width="2"/>
+                <line x1="0" y1="28" x2="480" y2="28" stroke="var(--ink-primary)" stroke-width="1.8"/>
+                <line x1="0" y1="33" x2="480" y2="33" stroke="var(--ink-primary)" stroke-width="1.8"/>
+                <line x1="0" y1="140" x2="480" y2="140" stroke="var(--ink-primary)" stroke-width="1.8"/>
+
+                <!-- Mid-Height Blocking at 5'-0" -->
+                <line x1="0" y1="84" x2="480" y2="84" stroke="var(--cad-red)" stroke-width="2"/>
+                <text x="485" y="87" fill="var(--cad-red)" font-size="7.5" font-weight="700">2x4 BLOCKING @ 5'-0"</text>
+
+                <!-- Studs @ 16" o.c. across 480px -->
+                <g stroke="var(--cad-blue)" stroke-width="1.2">
+                  <line x1="27" y1="33" x2="27" y2="140"/><line x1="53" y1="33" x2="53" y2="140"/>
+                  <line x1="80" y1="33" x2="80" y2="140"/><line x1="107" y1="33" x2="107" y2="140"/>
+                  <line x1="133" y1="33" x2="133" y2="140"/><line x1="160" y1="33" x2="160" y2="140"/>
+                  <line x1="187" y1="33" x2="187" y2="140"/><line x1="213" y1="33" x2="213" y2="140"/>
+                  <line x1="240" y1="33" x2="240" y2="140"/><line x1="267" y1="33" x2="267" y2="140"/>
+                  <line x1="293" y1="33" x2="293" y2="140"/><line x1="320" y1="33" x2="320" y2="140"/>
+                  <line x1="347" y1="33" x2="347" y2="140"/><line x1="373" y1="33" x2="373" y2="140"/>
+                  <line x1="400" y1="33" x2="400" y2="140"/><line x1="427" y1="33" x2="427" y2="140"/>
+                  <line x1="453" y1="33" x2="453" y2="140"/>
+                </g>
+                <text x="240" y="132" fill="var(--cad-blue)" font-size="8" font-weight="700" text-anchor="middle">2x4 STUDS @ 16" O.C.</text>
+
+                <!-- 10' Height Dimension -->
+                <line x1="-15" y1="24" x2="-15" y2="144" stroke="var(--cad-red)" stroke-width="1.2" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+                <text x="-25" y="84" fill="var(--cad-red)" font-size="9" font-weight="700" text-anchor="middle" transform="rotate(-90 -25 84)">10'-0" TALL</text>
+              </g>
+
+              <!-- Door Construction Callout Box -->
+              <g transform="translate(580, 290)">
+                <rect width="300" height="150" fill="var(--hatch-bg)" stroke="var(--border-inner)" stroke-width="1"/>
+                <text x="10" y="16" font-size="9" font-weight="700" fill="var(--ink-primary)">SITE-BUILT DOOR ASSEMBLY SPECIFICATION:</text>
+                <text x="10" y="32" font-size="8" fill="var(--ink-secondary)">• <strong>Header:</strong> (2) 2x10 No. 2 SYP + 1/2" OSB Spacer (IRC Table R602.7)</text>
+                <text x="10" y="46" font-size="8" fill="var(--ink-secondary)">• <strong>Jambs:</strong> (2) Jack Studs + (1) King Stud on each door side</text>
+                <text x="10" y="60" font-size="8" fill="var(--ink-secondary)">• <strong>Rough Opening:</strong> 74" Wide x 82" High (for dual 36"x80" doors)</text>
+                <text x="10" y="74" font-size="8" fill="var(--ink-secondary)">• <strong>Leaves:</strong> 2x4 flat-frame with diagonal compression brace</text>
+                <text x="10" y="88" font-size="8" fill="var(--ink-secondary)">• <strong>Skin:</strong> 7/16" LP SmartSide structural panel glued and screwed</text>
+                <text x="10" y="102" font-size="8" fill="var(--ink-secondary)">• <strong>Hardware:</strong> (3) 8" heavy-duty galvanized T-hinges per leaf</text>
+                <text x="10" y="122" font-size="8.5" font-weight="700" fill="var(--cad-blue)">SIDING / SHEAR BRACING SPECIFICATION:</text>
+                <text x="10" y="136" font-size="8" fill="var(--ink-secondary)">• 7/16" LP SmartSide panel siding direct-to-stud (Method CS-WSP)</text>
+              </g>
+            </svg>
+
+          </div>
+
+          <div class="master-titleblock">
+            <div class="tb-cell">
+              <span class="tb-label">Project &amp; Location</span>
+              <div class="tb-content-main">12'x24' MONO-PITCH STORAGE SHED</div>
+              <div class="tb-subtext">PARCEL ID: CHEROKEE CO. | MURPHY, NC 28906</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Drawing Title</span>
+              <div class="tb-content-main">WALL FRAMING &amp; ELEVATIONS</div>
+              <div class="tb-subtext">BEARING HEADER &amp; 12' STUD SCHEDULE</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Design Standard / Path</span>
+              <div class="tb-content-main">IRC PRESCRIPTIVE PATH</div>
+              <div class="tb-subtext">NCRC SECTION R602 / TABLE R602.3(5)</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Scale &amp; Date</span>
+              <div class="tb-content-main">1/4" = 1'-0"</div>
+              <div class="tb-subtext">OCTOBER 2026</div>
+            </div>
+            <div class="tb-cell" style="background: rgba(2,132,199,0.06);">
+              <span class="tb-label">Sheet Number</span>
+              <div class="tb-sheet-num">S-103</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- SHEET S-104: MONO-PITCH ROOF & OVERHANG SECTION            -->
+    <!-- ========================================================= -->
+    <div class="arch-sheet" id="sheet-S-104">
+      <div class="arch-border-outer">
+        <div class="coord-h coord-top"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+        <div class="coord-h coord-bottom"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+        <div class="coord-v coord-left"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+        <div class="coord-v coord-right"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+
+        <div class="arch-border-inner">
+          <div class="drawing-canvas">
+
+            <div class="view-title-block">
+              <div class="view-bubble"><span>1</span><div class="view-bubble-divider"></div><span>S104</span></div>
+              <div class="view-title-text">
+                <div class="view-title-main">MONO-PITCH ROOF CROSS-SECTION &amp; OVERHANG DETAIL</div>
+                <div class="view-title-scale">SCALE: 3/8" = 1'-0"</div>
+              </div>
+            </div>
+
+            <!-- Roof Cross-Section SVG -->
+            <svg class="arch-svg" viewBox="0 0 920 460" xmlns="http://www.w3.org/2000/svg">
+              <!-- Overall Horizontal Projection Dimension: 16" + 144" + 12" = 172" (14'-4") -->
+              <line x1="147" y1="36" x2="720" y2="36" stroke="var(--cad-red)" stroke-width="1.2" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+              <text x="433" y="28" fill="var(--cad-red)" font-size="10" font-weight="700" text-anchor="middle">14'-4" TOTAL HORIZONTAL ROOF PROJECTION (CUT FROM 16' COMMERCIAL 2x10 STOCK)</text>
+
+              <!-- Overhang Callout: 16" Front Eave -->
+              <line x1="147" y1="56" x2="200" y2="56" stroke="var(--cad-blue)" stroke-width="1.2" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+              <text x="173" y="52" fill="var(--cad-blue)" font-size="9" font-weight="700" text-anchor="middle">16" OVERHANG</text>
+
+              <!-- Clear Wall Span: 12'-0" -->
+              <line x1="200" y1="56" x2="680" y2="56" stroke="var(--cad-red)" stroke-width="1.2" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+              <text x="440" y="52" fill="var(--cad-red)" font-size="10" font-weight="700" text-anchor="middle">12'-0" CLEAR WALL-TO-WALL SPAN</text>
+
+              <!-- Overhang Callout: 12" Rear Drip -->
+              <line x1="680" y1="56" x2="720" y2="56" stroke="var(--cad-blue)" stroke-width="1.2" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+              <text x="700" y="52" fill="var(--cad-blue)" font-size="9" font-weight="700" text-anchor="middle">12"</text>
+
+              <!-- Front High Bearing Wall (12') -->
+              <rect x="188" y="150" width="12" height="230" fill="rgba(0,0,0,0.04)" stroke="var(--ink-primary)" stroke-width="2"/>
+              <rect x="186" y="142" width="16" height="8" fill="rgba(217,119,6,0.2)" stroke="var(--cad-amber)" stroke-width="1.2"/>
+              <text x="175" y="270" fill="var(--ink-primary)" font-size="9" font-weight="700" text-anchor="middle" transform="rotate(-90 175 270)">12'-0" FRONT BEARING WALL</text>
+
+              <!-- Rear Low Bearing Wall (10') -->
+              <rect x="680" y="210" width="12" height="170" fill="rgba(0,0,0,0.04)" stroke="var(--ink-primary)" stroke-width="2"/>
+              <rect x="678" y="202" width="16" height="8" fill="rgba(217,119,6,0.2)" stroke="var(--cad-amber)" stroke-width="1.2"/>
+              <text x="705" y="290" fill="var(--ink-primary)" font-size="9" font-weight="700" text-anchor="middle" transform="rotate(90 705 290)">10'-0" REAR BEARING WALL</text>
+
+              <!-- Floor Line -->
+              <rect x="180" y="380" width="520" height="12" fill="rgba(217,119,6,0.15)" stroke="var(--ink-primary)" stroke-width="1.5"/>
+
+              <!-- 2x10 Rafter with 2:12 Slope (9.46°) -->
+              <g transform="rotate(9.46 200 142)">
+                <!-- Rafter Board -->
+                <rect x="146" y="118" width="584" height="24" fill="rgba(217,119,6,0.25)" stroke="var(--cad-amber)" stroke-width="2"/>
+                <!-- Roof Deck (7/16" OSB) -->
+                <rect x="146" y="111" width="584" height="7" fill="rgba(0,0,0,0.08)" stroke="var(--ink-dim)" stroke-width="1"/>
+                <!-- 29-Ga Ribbed Metal Panel -->
+                <line x1="144" y1="108" x2="732" y2="108" stroke="var(--cad-blue)" stroke-width="3"/>
+                <!-- Fascia Boards -->
+                <rect x="142" y="116" width="4" height="26" fill="var(--ink-primary)"/>
+                <rect x="730" y="116" width="4" height="26" fill="var(--ink-primary)"/>
+              </g>
+
+              <!-- 2:12 Pitch Indicator Triangle -->
+              <polygon points="390,155 470,155 470,168" fill="none" stroke="var(--cad-red)" stroke-width="1.2"/>
+              <text x="430" y="150" fill="var(--cad-red)" font-size="9" font-weight="700">12</text>
+              <text x="478" y="165" fill="var(--cad-red)" font-size="9" font-weight="700">2</text>
+
+              <!-- Front 16" Overhang Detail -->
+              <path d="M 147 125 L 110 85 L 30 85" fill="none" stroke="var(--cad-blue)" stroke-width="1.2"/>
+              <text x="25" y="80" fill="var(--cad-blue)" font-size="9" font-weight="700">16" FRONT OVERHANG DETAIL:</text>
+              <text x="25" y="94" fill="var(--ink-secondary)" font-size="7.5">• 16" Horizontal Eave Projection</text>
+              <text x="25" y="106" fill="var(--ink-secondary)" font-size="7.5">• Weather canopy over centered 6' entry doors</text>
+              <text x="25" y="118" fill="var(--ink-secondary)" font-size="7.5">• Continuous perforated vinyl soffit intake vent</text>
+
+              <!-- Simpson H2.5A Ties Callout -->
+              <circle cx="194" cy="146" r="6" fill="var(--cad-red)"/>
+              <path d="M 194 146 L 240 100 L 330 100" fill="none" stroke="var(--cad-red)" stroke-width="1.2"/>
+              <text x="335" y="98" fill="var(--cad-red)" font-size="9" font-weight="700">UPLIFT CONNECTION:</text>
+              <text x="335" y="112" fill="var(--ink-secondary)" font-size="7.5">• Simpson Strong-Tie H2.5A clip at each rafter seat</text>
+              <text x="335" y="124" fill="var(--ink-secondary)" font-size="7.5">• Fastened with (8) 1-1/2" Simpson SD structural screws</text>
+
+              <!-- Rear 12" Overhang & Birdsmouth Cut -->
+              <circle cx="686" cy="208" r="6" fill="var(--cad-red)"/>
+              <path d="M 686 208 L 740 160 L 850 160" fill="none" stroke="var(--cad-red)" stroke-width="1.2"/>
+              <text x="850" y="156" fill="var(--cad-red)" font-size="9" font-weight="700" text-anchor="end">12" REAR DRIP OVERHANG &amp; BIRDSMOUTH:</text>
+              <text x="850" y="170" fill="var(--ink-secondary)" font-size="7.5" text-anchor="end">12" horizontal projection clears foundation piers •</text>
+              <text x="850" y="182" fill="var(--ink-secondary)" font-size="7.5" text-anchor="end">Max 1-1/2" birdsmouth seat depth onto double plate •</text>
+              <text x="850" y="194" fill="var(--ink-secondary)" font-size="7.5" text-anchor="end">Fascia with hemmed 26-ga drip flashing •</text>
+
+              <!-- Clear Interior Height Dimensions -->
+              <line x1="225" y1="155" x2="225" y2="380" stroke="var(--cad-blue)" stroke-width="1.2" stroke-dasharray="3,3"/>
+              <text x="235" y="270" fill="var(--cad-blue)" font-size="9.5" font-weight="700">11'-4" CLEAR INTERIOR</text>
+
+              <line x1="655" y1="215" x2="655" y2="380" stroke="var(--cad-blue)" stroke-width="1.2" stroke-dasharray="3,3"/>
+              <text x="645" y="300" fill="var(--cad-blue)" font-size="9.5" font-weight="700" text-anchor="end">9'-4" CLEAR INTERIOR</text>
+            </svg>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px;">
+              <div class="keynotes-box">
+                <h4>RAFTER SPAN &amp; GEOMETRIC TAKE-OFF</h4>
+                <ul>
+                  <li><strong>Span Calculation:</strong> Horizontal projection = $16\text{" (front)} + 144\text{" (span)} + 12\text{" (rear)} = 172\text{"} \text{ } (14\text{'-}4\text{"})$.</li>
+                  <li><strong>Slope Length:</strong> At 2:12 slope ($9.46^\circ$), true cut length is $\sqrt{172^2 + 28.67^2} = \mathbf{174\frac{3}{8}\text{"} \text{ } (14\text{'-}5\frac{3}{8}\text{"})}$.</li>
+                  <li><strong>Commercial Board Fit:</strong> Standard 16'-0" (192") 2x10 boards accommodate the plumb cuts and birdsmouth without splicing.</li>
+                  <li><strong>Code Capacity:</strong> NCRC Table R802.5.1 allows 2x10 No. 2 SYP @ 16" o.c. up to 16'-6" under 20 psf snow load. Clear span is only 12'-0".</li>
+                </ul>
+              </div>
+              <div class="keynotes-box">
+                <h4>ROOF SHEATHING &amp; METAL ASSEMBLY</h4>
+                <ul>
+                  <li><strong>Decking:</strong> 7/16" APA-Rated Exposure 1 OSB nailed with 8d common nails at 6" o.c. on edges, 12" o.c. in field.</li>
+                  <li><strong>Underlayment:</strong> Continuous synthetic underlayment (ASTM D226/D4869) with 4" side laps and 6" end laps.</li>
+                  <li><strong>Metal Covering:</strong> 29-gauge ribbed steel panels fastened with 1-1/2" hex-head screws with EPDM neoprene sealing washers.</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="master-titleblock">
+            <div class="tb-cell">
+              <span class="tb-label">Project &amp; Location</span>
+              <div class="tb-content-main">12'x24' MONO-PITCH STORAGE SHED</div>
+              <div class="tb-subtext">PARCEL ID: CHEROKEE CO. | MURPHY, NC 28906</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Drawing Title</span>
+              <div class="tb-content-main">ROOF CROSS-SECTION &amp; OVERHANGS</div>
+              <div class="tb-subtext">16" FRONT EAVE &amp; 12" REAR DRIP DETAIL</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Design Standard / Path</span>
+              <div class="tb-content-main">IRC PRESCRIPTIVE PATH</div>
+              <div class="tb-subtext">NCRC SECTION R802 / TABLE R802.5.1(1)</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Scale &amp; Date</span>
+              <div class="tb-content-main">3/8" = 1'-0"</div>
+              <div class="tb-subtext">OCTOBER 2026</div>
+            </div>
+            <div class="tb-cell" style="background: rgba(2,132,199,0.06);">
+              <span class="tb-label">Sheet Number</span>
+              <div class="tb-sheet-num">S-104</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- SHEET E-101: 60A ELECTRICAL FEEDER, TRENCH & PLAN          -->
+    <!-- ========================================================= -->
+    <div class="arch-sheet" id="sheet-E-101">
+      <div class="arch-border-outer">
+        <div class="coord-h coord-top"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+        <div class="coord-h coord-bottom"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+        <div class="coord-v coord-left"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+        <div class="coord-v coord-right"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+
+        <div class="arch-border-inner">
+          <div class="drawing-canvas">
+
+            <div class="view-title-block">
+              <div class="view-bubble"><span>1</span><div class="view-bubble-divider"></div><span>E101</span></div>
+              <div class="view-title-text">
+                <div class="view-title-main">60-AMP ELECTRICAL LAYOUT &amp; TRENCH SECTION</div>
+                <div class="view-title-scale">SCALE: 1/4" = 1'-0"</div>
+              </div>
+            </div>
+
+            <!-- Electrical Plan SVG -->
+            <svg class="arch-svg" viewBox="0 0 920 450" xmlns="http://www.w3.org/2000/svg">
+              <!-- Shed Interior Outline (12' x 24') -->
+              <rect x="250" y="30" width="620" height="240" fill="rgba(0,122,61,0.03)" stroke="var(--ink-primary)" stroke-width="2.5"/>
+              <text x="560" y="20" fill="var(--ink-primary)" font-size="10" font-weight="700" text-anchor="middle">12' x 24' INTERIOR ELECTRICAL FIXTURE LAYOUT</text>
+
+              <!-- Centered 6' Double Door on Front Wall (Top edge, x=500 to 620) -->
+              <rect x="500" y="25" width="120" height="10" fill="var(--sheet-bg)" stroke="var(--cad-red)" stroke-width="1.8"/>
+              <text x="560" y="15" fill="var(--cad-red)" font-size="8" font-weight="700" text-anchor="middle">CENTERED 6'-0" DOUBLE ENTRANCE</text>
+
+              <!-- Interior Switches (S1, S2) at Left Door Jamb -->
+              <rect x="475" y="38" width="18" height="26" fill="var(--cad-green)" stroke="var(--ink-primary)" stroke-width="1"/>
+              <text x="484" y="49" fill="#ffffff" font-size="7.5" font-weight="700" text-anchor="middle">S1</text>
+              <text x="484" y="60" fill="#ffffff" font-size="7.5" font-weight="700" text-anchor="middle">S2</text>
+              <text x="468" y="52" fill="var(--cad-green)" font-size="7.5" font-weight="700" text-anchor="end">SWITCHES @ 48" AFF</text>
+
+              <!-- Exterior Wet-Rated Entry Floodlight -->
+              <circle cx="560" cy="22" r="7" fill="var(--cad-amber)" stroke="var(--ink-primary)" stroke-width="1.2"/>
+              <path d="M 560 22 L 484 45" fill="none" stroke="var(--cad-amber)" stroke-width="1" stroke-dasharray="2,2"/>
+              <text x="560" y="38" fill="var(--cad-amber)" font-size="7.5" font-weight="700" text-anchor="middle">EXTERIOR WET FLOODLIGHT (S2)</text>
+
+              <!-- (3) Overhead 4' Linkable LED Strip Fixtures -->
+              <g stroke="var(--cad-blue)" stroke-width="1.5" fill="rgba(2,132,199,0.1)">
+                <rect x="320" y="135" width="90" height="18" rx="2"/>
+                <rect x="515" y="135" width="90" height="18" rx="2"/>
+                <rect x="710" y="135" width="90" height="18" rx="2"/>
+              </g>
+              <line x1="410" y1="144" x2="515" y2="144" stroke="var(--cad-blue)" stroke-width="1.5" stroke-dasharray="3,3"/>
+              <line x1="605" y1="144" x2="710" y2="144" stroke="var(--cad-blue)" stroke-width="1.5" stroke-dasharray="3,3"/>
+              <line x1="560" y1="135" x2="484" y2="58" stroke="var(--cad-blue)" stroke-width="1.5" stroke-dasharray="3,3"/>
+              <text x="560" y="166" fill="var(--cad-blue)" font-size="8.5" font-weight="700" text-anchor="middle">(3) 4-FT LINKABLE LED FIXTURES (4,000+ LUMENS EA, 5000K) [CIRCUIT 1]</text>
+
+              <!-- Interior 20A Convenience Outlets @ 44"-48" AFF -->
+              <g fill="var(--cad-green)" stroke="var(--ink-primary)" stroke-width="1.2">
+                <circle cx="360" cy="30" r="5"/><circle cx="760" cy="30" r="5"/>
+                <circle cx="360" cy="270" r="5"/><circle cx="560" cy="270" r="5"/><circle cx="760" cy="270" r="5"/>
+                <circle cx="870" cy="150" r="5"/>
+              </g>
+              <text x="760" y="48" fill="var(--cad-green)" font-size="7.5" font-weight="700" text-anchor="middle">OUTLETS @ 44" AFF (GFCI)</text>
+
+              <!-- Dedicated Heater Receptacle (Circuit 4) -->
+              <rect x="258" y="210" width="14" height="14" fill="var(--cad-red)" stroke="var(--border-outer)" stroke-width="1"/>
+              <text x="280" y="221" fill="var(--cad-red)" font-size="8" font-weight="700">DEDICATED HEATER RECEPTACLE (PAINT FREEZE PROTECTION)</text>
+
+              <!-- Exterior WR-Rated Outlets with In-Use Bubble Covers -->
+              <rect x="635" y="18" width="12" height="12" fill="var(--cad-blue)" stroke="var(--ink-primary)" stroke-width="1.2"/>
+              <rect x="554" y="272" width="12" height="12" fill="var(--cad-blue)" stroke="var(--ink-primary)" stroke-width="1.2"/>
+              <text x="655" y="26" fill="var(--cad-blue)" font-size="7.5" font-weight="700">EXTERIOR WR GFCI IN-USE COVER</text>
+
+              <!-- 60A Subpanel & Dual Ground Rods -->
+              <rect x="258" y="70" width="20" height="34" fill="#1e293b" stroke="var(--cad-blue)" stroke-width="1.8"/>
+              <text x="286" y="82" fill="var(--cad-blue)" font-size="9" font-weight="700">60A SUBPANEL</text>
+              <text x="286" y="94" fill="var(--ink-dim)" font-size="7.5">• Unbonded Floating Neutral</text>
+              <text x="286" y="104" fill="var(--ink-dim)" font-size="7.5">• Main Disconnect Breaker</text>
+
+              <!-- Dual Driven Ground Rods (NEC 250.32) -->
+              <line x1="268" y1="104" x2="210" y2="140" stroke="var(--cad-amber)" stroke-width="1.5"/>
+              <circle cx="210" cy="140" r="4" fill="var(--cad-amber)"/>
+              <line x1="210" y1="140" x2="150" y2="180" stroke="var(--cad-amber)" stroke-width="1.5"/>
+              <circle cx="150" cy="180" r="4" fill="var(--cad-amber)"/>
+              <text x="140" y="196" fill="var(--cad-amber)" font-size="8" font-weight="700">(2) 5/8" x 8' COPPER GROUND RODS SPACED 6'-0" APART</text>
+
+              <!-- UNDERGROUND TRENCH ELEVATION DIAGRAM (Bottom) -->
+              <g transform="translate(60, 300)">
+                <rect width="800" height="130" fill="var(--hatch-bg)" stroke="var(--border-inner)" stroke-width="1.2"/>
+                <text x="12" y="16" font-size="9" font-weight="700" fill="var(--ink-primary)">UNDERGROUND TRENCH SECTION DETAIL (NEC TABLE 300.5 — RESIDENTIAL 60A FEEDER)</text>
+
+                <!-- Ground Surface Line -->
+                <line x1="20" y1="40" x2="420" y2="40" stroke="var(--cad-green)" stroke-width="2.5"/>
+                <text x="430" y="43" font-size="8" font-weight="700" fill="var(--cad-green)">FINISHED GRADE</text>
+
+                <!-- 18" Minimum Dimension -->
+                <line x1="50" y1="40" x2="50" y2="105" stroke="var(--cad-red)" stroke-width="1.2" marker-start="url(#archTick)" marker-end="url(#archTick)"/>
+                <text x="42" y="76" font-size="8.5" font-weight="700" fill="var(--cad-red)" text-anchor="end">18" MIN.</text>
+
+                <!-- Warning Ribbon -->
+                <line x1="70" y1="65" x2="160" y2="65" stroke="var(--cad-red)" stroke-width="2.5"/>
+                <text x="170" y="68" font-size="7.5" font-weight="700" fill="var(--cad-red)">RED WARNING TAPE (12" ABOVE CONDUIT)</text>
+
+                <!-- Conduit -->
+                <rect x="80" y="98" width="40" height="14" fill="rgba(0,0,0,0.1)" stroke="var(--ink-primary)" stroke-width="1.4"/>
+                <text x="100" y="108" font-size="7" font-weight="700" text-anchor="middle">PVC</text>
+
+                <!-- Trench Callout Details -->
+                <text x="430" y="68" font-size="8" fill="var(--ink-secondary)">• <strong>Run Length:</strong> Approx. 35 to 40 Linear Feet from Main Residence Panel</text>
+                <text x="430" y="82" font-size="8" fill="var(--ink-secondary)">• <strong>Conduit Specification:</strong> 1" Schedule 40 PVC (Transitions to Sch 80 above ground)</text>
+                <text x="430" y="96" font-size="8" fill="var(--ink-secondary)">• <strong>Conductors:</strong> (2) #6 AWG THHN Cu (Hots), (1) #6 THHN Cu (Neutral), (1) #10 THHN Cu (Ground)</text>
+                <text x="430" y="110" font-size="8" fill="var(--ink-secondary)">• <strong>Supply Protection:</strong> 60A 2-Pole Circuit Breaker installed in Residence Distribution Panel</text>
+              </g>
+            </svg>
+
+          </div>
+
+          <div class="master-titleblock">
+            <div class="tb-cell">
+              <span class="tb-label">Project &amp; Location</span>
+              <div class="tb-content-main">12'x24' MONO-PITCH STORAGE SHED</div>
+              <div class="tb-subtext">PARCEL ID: CHEROKEE CO. | MURPHY, NC 28906</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Drawing Title</span>
+              <div class="tb-content-main">60A ELECTRICAL FEEDER &amp; BRANCH PLAN</div>
+              <div class="tb-subtext">18" TRENCH SECTION &amp; DUAL GROUND RODS</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Design Standard / Path</span>
+              <div class="tb-content-main">NEC / NFPA 70</div>
+              <div class="tb-subtext">ARTICLE 225, 250.32 &amp; TABLE 300.5</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Scale &amp; Date</span>
+              <div class="tb-content-main">1/4" = 1'-0"</div>
+              <div class="tb-subtext">OCTOBER 2026</div>
+            </div>
+            <div class="tb-cell" style="background: rgba(2,132,199,0.06);">
+              <span class="tb-label">Sheet Number</span>
+              <div class="tb-sheet-num">E-101</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- SHEET M-101: GENERAL SPECIFICATIONS & LUMBER TAKEOFF       -->
+    <!-- ========================================================= -->
+    <div class="arch-sheet" id="sheet-M-101">
+      <div class="arch-border-outer">
+        <div class="coord-h coord-top"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+        <div class="coord-h coord-bottom"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+        <div class="coord-v coord-left"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+        <div class="coord-v coord-right"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+
+        <div class="arch-border-inner">
+          <div class="drawing-canvas">
+
+            <div class="view-title-block">
+              <div class="view-bubble"><span>1</span><div class="view-bubble-divider"></div><span>M101</span></div>
+              <div class="view-title-text">
+                <div class="view-title-main">GENERAL STRUCTURAL SPECIFICATIONS &amp; LUMBER ORDER SCHEDULE</div>
+                <div class="view-title-scale">SCHEDULE OF MATERIALS &amp; TAKEOFF</div>
+              </div>
+            </div>
+
+            <!-- Schedules Table -->
+            <table class="spec-table">
+              <thead>
+                <tr>
+                  <th style="width:20%;">Assembly Phase</th>
+                  <th style="width:38%;">Material Description &amp; Trade Specification</th>
+                  <th style="width:12%;">Order Qty</th>
+                  <th style="width:30%;">Framing Location / Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td rowspan="5"><strong>1. Foundation &amp; Piers</strong></td>
+                  <td>Ready-Mix Concrete (80 lb bags, 3000+ PSI)</td>
+                  <td>36 Bags</td>
+                  <td>(12) 18"x18"x8" Footing Pads + 12" Piers</td>
+                </tr>
+                <tr>
+                  <td>12" x 4' Sonotube Concrete Forms</td>
+                  <td>4 Tubes</td>
+                  <td>Cut to grade heights on mountain slope</td>
+                </tr>
+                <tr>
+                  <td>#4 (1/2") Grade 60 Rebar (10' sticks)</td>
+                  <td>6 Sticks</td>
+                  <td>Cut to (24) vertical pier reinforcement rods</td>
+                </tr>
+                <tr>
+                  <td>Simpson Strong-Tie PBS66 Standoff Bases</td>
+                  <td>12 Units</td>
+                  <td>Cast-in-place anchor to concrete pier tops</td>
+                </tr>
+                <tr>
+                  <td>6x6 x 8' Pressure-Treated Timber Posts</td>
+                  <td>4 Timbers</td>
+                  <td>Cut to stubs &lt; 4'-0" height (Ground contact)</td>
+                </tr>
+                <tr>
+                  <td rowspan="4"><strong>2. Girders &amp; Floor</strong></td>
+                  <td>6x6 x 12' Pressure-Treated Girders (SYP)</td>
+                  <td>6 Timbers</td>
+                  <td>(3) continuous 24-foot girder lines</td>
+                </tr>
+                <tr>
+                  <td>Simpson Strong-Tie AC6 / PC66 Post Caps</td>
+                  <td>12 Units</td>
+                  <td>Secures 6x6 girders to 6x6 post stubs</td>
+                </tr>
+                <tr>
+                  <td>2x6 x 12' Pressure-Treated Joists</td>
+                  <td>25 Boards</td>
+                  <td>Floor joists @ 16" o.c. + double rim under door</td>
+                </tr>
+                <tr>
+                  <td>3/4" T&amp;G Exterior Plywood/OSB (4x8)</td>
+                  <td>9 Sheets</td>
+                  <td>Advantech or LP ProStruct subfloor deck</td>
+                </tr>
+                <tr>
+                  <td rowspan="5"><strong>3. Wall Framing</strong></td>
+                  <td>2x4 x 12' Framing Studs (SPF/Hem-Fir)</td>
+                  <td>30 Studs</td>
+                  <td>12' Front wall studs @ 12" o.c., jacks, kings</td>
+                </tr>
+                <tr>
+                  <td>2x4 x 10' Framing Studs</td>
+                  <td>24 Studs</td>
+                  <td>10' Rear load-bearing wall @ 16" o.c.</td>
+                </tr>
+                <tr>
+                  <td>2x4 x 12' Studs (Gable Rake Walls)</td>
+                  <td>20 Studs</td>
+                  <td>Solid side rake walls angled 10' to 12' height</td>
+                </tr>
+                <tr>
+                  <td>2x4 x 8' Framing Studs &amp; Plates</td>
+                  <td>35 Studs</td>
+                  <td>Fire-blocking, plates, cripples, door framing</td>
+                </tr>
+                <tr>
+                  <td>2x10 x 8' Structural Header Lumber</td>
+                  <td>2 Boards</td>
+                  <td>Double 2x10 bearing header for 6' center door</td>
+                </tr>
+                <tr>
+                  <td rowspan="4"><strong>4. Roof Framing &amp; Metal</strong></td>
+                  <td>2x10 x 16' No. 2 Southern Yellow Pine (SYP)</td>
+                  <td>21 Rafters</td>
+                  <td>Rafters @ 16" o.c. (Cut to $14\text{'-}5\frac{3}{8}\text{"}$ for 16"/12" overhangs)</td>
+                </tr>
+                <tr>
+                  <td>Simpson Strong-Tie H2.5A Hurricane Ties</td>
+                  <td>84 Clips</td>
+                  <td>(42) for floor joists + (42) for roof rafters</td>
+                </tr>
+                <tr>
+                  <td>7/16" OSB Sheathing (4x8)</td>
+                  <td>12 Sheets</td>
+                  <td>Continuous roof underlayment deck</td>
+                </tr>
+                <tr>
+                  <td>29-Ga Ribbed Metal Roofing (3' x 16')</td>
+                  <td>9 Panels</td>
+                  <td>Finished roof covering (trimmed to 16"/12" overhangs)</td>
+                </tr>
+                <tr>
+                  <td rowspan="3"><strong>5. Envelope &amp; Siding</strong></td>
+                  <td>7/16" LP SmartSide Panel Siding (4x8)</td>
+                  <td>26 Sheets</td>
+                  <td>Direct-to-stud shear wall + custom door skin</td>
+                </tr>
+                <tr>
+                  <td>Galvanized Metal Z-Flashing (10' sticks)</td>
+                  <td>6 Sticks</td>
+                  <td>Waterproofing for horizontal siding seams</td>
+                </tr>
+                <tr>
+                  <td>Heavy-Duty 8" Galvanized T-Hinges</td>
+                  <td>6 Hinges</td>
+                  <td>(3) per 36" site-built door leaf</td>
+                </tr>
+                <tr>
+                  <td rowspan="4"><strong>6. 60A Electrical</strong></td>
+                  <td>60A 8-to-12 Space Subpanel (Main Breaker)</td>
+                  <td>1 Unit</td>
+                  <td>Shed power center with unbonded neutral bar</td>
+                </tr>
+                <tr>
+                  <td>1" Schedule 40 PVC Conduit (10' sticks)</td>
+                  <td>4 Sticks</td>
+                  <td>Buried 18" deep in 35-40' trench</td>
+                </tr>
+                <tr>
+                  <td>#6 AWG THHN Copper Feeder Wire</td>
+                  <td>150 Feet</td>
+                  <td>(2) Hots (Black/Red), (1) Neutral (White)</td>
+                </tr>
+                <tr>
+                  <td>5/8" x 8' Copper Ground Rods &amp; Clamps</td>
+                  <td>2 Sets</td>
+                  <td>Exterior grounding field spaced 6' apart</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Fastening & General Structural Notes Box -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px;">
+              <div class="keynotes-box">
+                <h4>FASTENER SCHEDULE (NCRC TABLE R602.3(1))</h4>
+                <ul>
+                  <li><strong>Joist to Girder:</strong> (3) 8d common toenails + (1) Simpson H2.5A clip.</li>
+                  <li><strong>Stud to Plate:</strong> (2) 16d common end-nails or (3) 10d toenails per joint.</li>
+                  <li><strong>Double Top Plate Splice:</strong> (8) 16d common nails face-nailed, minimum 24" lap.</li>
+                  <li><strong>LP SmartSide Siding:</strong> 8d hot-dipped galvanized nails @ 6" edge / 12" field.</li>
+                  <li><strong>Rafter to Top Plate:</strong> (1) Simpson H2.5A hurricane tie with (8) 1-1/2" SD screws.</li>
+                </ul>
+              </div>
+              <div class="keynotes-box">
+                <h4>FIELD INSPECTION MILESTONES (CHEROKEE CO.)</h4>
+                <ul>
+                  <li><strong>Inspection 1 (Footing):</strong> Holes excavated 18" deep before concrete pour.</li>
+                  <li><strong>Inspection 2 (Open Trench):</strong> Feeder conduit verified at 18" depth before backfill.</li>
+                  <li><strong>Inspection 3 (Framing &amp; Rough-In):</strong> Skeleton dried in with wiring rough, prior to wall close-in.</li>
+                  <li><strong>Inspection 4 (Final):</strong> Structure painted, GFCI tested, subpanel labeled.</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="master-titleblock">
+            <div class="tb-cell">
+              <span class="tb-label">Project &amp; Location</span>
+              <div class="tb-content-main">12'x24' MONO-PITCH STORAGE SHED</div>
+              <div class="tb-subtext">PARCEL ID: CHEROKEE CO. | MURPHY, NC 28906</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Drawing Title</span>
+              <div class="tb-content-main">SPECIFICATIONS &amp; LUMBER SCHEDULE</div>
+              <div class="tb-subtext">FASTENER TABLE &amp; MATERIALS TAKEOFF</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Design Standard / Path</span>
+              <div class="tb-content-main">IRC PRESCRIPTIVE PATH</div>
+              <div class="tb-subtext">NCRC CHAPTERS 4, 5, 6, 8 &amp; NEC</div>
+            </div>
+            <div class="tb-cell">
+              <span class="tb-label">Scale &amp; Date</span>
+              <div class="tb-content-main">AS NOTED</div>
+              <div class="tb-subtext">OCTOBER 2026</div>
+            </div>
+            <div class="tb-cell" style="background: rgba(2,132,199,0.06);">
+              <span class="tb-label">Sheet Number</span>
+              <div class="tb-sheet-num">M-101</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Sheet Tab Navigation Logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabs = document.querySelectorAll('.sheet-tab');
+      const sheets = document.querySelectorAll('.arch-sheet');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const targetSheetId = 'sheet-' + tab.getAttribute('data-sheet');
+
+          tabs.forEach(t => t.classList.remove('active'));
+          sheets.forEach(s => s.classList.remove('active'));
+
+          tab.classList.add('active');
+          const target = document.getElementById(targetSheetId);
+          if (target) {
+            target.classList.add('active');
+          }
+        });
+      });
+    });
+
+    // Toggle Blueprint vs CAD Monochrome Mode
+    function toggleBlueprintMode() {
+      const body = document.body;
+      const text = document.getElementById('themeBtnText');
+      body.classList.toggle('blueprint-mode');
+      if (body.classList.contains('blueprint-mode')) {
+        text.innerText = 'Plotter B&W View';
+      } else {
+        text.innerText = 'Blueprint View';
+      }
+    }
+  </script>
+</body>
+</html>
